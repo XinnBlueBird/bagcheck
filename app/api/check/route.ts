@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPortfolio, isValidSolanaAddress } from "@/lib/helius";
 import { computeVerdict } from "@/lib/verdict";
+import { computeInsights } from "@/lib/insights";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,7 +28,8 @@ export async function GET(req: NextRequest) {
   try {
     const portfolio = await getPortfolio(address);
     const verdict = computeVerdict(portfolio);
-    return NextResponse.json({ portfolio, verdict });
+    const insights = computeInsights(portfolio);
+    return NextResponse.json({ portfolio, verdict, insights });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(

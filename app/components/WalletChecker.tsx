@@ -4,10 +4,13 @@ import { useState, useCallback } from "react";
 import { Search, Loader2, Wallet, Copy, Check, AlertTriangle } from "lucide-react";
 import type { Portfolio, TokenHolding } from "@/lib/helius";
 import type { Verdict } from "@/lib/verdict";
+import type { Insights } from "@/lib/insights";
+import InsightsPanel from "./InsightsPanel";
 
 interface Result {
   portfolio: Portfolio;
   verdict: Verdict;
+  insights: Insights;
 }
 
 const ACCENT: Record<string, string> = {
@@ -166,6 +169,9 @@ function Results({ result, copied, onCopy }: { result: Result; copied: boolean; 
           </div>
         ))}
       </div>
+
+      {/* Insights — risk signals + composition */}
+      <InsightsPanel insights={result.insights} />
 
       {/* Holdings */}
       <Holdings tokens={portfolio.tokens} solBalance={portfolio.solBalance} solUsd={portfolio.solUsd} />
