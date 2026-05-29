@@ -1,28 +1,43 @@
 import WalletChecker from "./components/WalletChecker";
-import { Wallet, Zap, Shield, ExternalLink } from "lucide-react";
+import Features from "./components/Features";
+import Tokenomics from "./components/Tokenomics";
+import Roadmap from "./components/Roadmap";
+import { Wallet, ExternalLink } from "lucide-react";
 import { APP, TOKEN } from "@/config/token";
 
 const SAMPLE = "GDfnEsia2WLAW5t8yx2X5j2mkfA74i5kwGdDuZHt7XmG";
+
+const NAV = [
+  { label: "Features", href: "#features" },
+  { label: "Tokenomics", href: "#tokenomics" },
+  { label: "Roadmap", href: "#roadmap" },
+];
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-zinc-100 overflow-x-hidden">
       {/* Nav */}
-      <nav className="border-b border-zinc-900">
+      <nav className="sticky top-0 z-50 border-b border-zinc-900 bg-black/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-400 text-black">
-              <Wallet className="h-5 w-5" />
-            </div>
+          <a href="#" className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icon.svg" alt="BagCheck" className="h-8 w-8" />
             <span className="text-lg font-black tracking-tight">BagCheck</span>
+          </a>
+          <div className="hidden items-center gap-7 sm:flex">
+            {NAV.map((n) => (
+              <a key={n.href} href={n.href} className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition">
+                {n.label}
+              </a>
+            ))}
           </div>
           <a
             href={TOKEN.socials.x}
             target="_blank"
             rel="noreferrer"
-            className="text-sm font-medium text-zinc-400 hover:text-zinc-200 transition"
+            className="rounded-lg bg-zinc-900 px-3 py-1.5 text-sm font-medium text-zinc-300 hover:bg-zinc-800 transition"
           >
-            Follow updates
+            Follow
           </a>
         </div>
       </nav>
@@ -31,7 +46,7 @@ export default function Home() {
       <section className="mx-auto max-w-5xl px-5 pt-16 pb-10 sm:pt-24">
         <div className="text-center">
           <span className="inline-block rounded-full border border-lime-500/30 bg-lime-500/10 px-3 py-1 text-xs font-mono font-semibold text-lime-400">
-            Solana wallet analyzer
+            Solana wallet analyzer · ${TOKEN.symbol} coming soon
           </span>
           <h1 className="mt-6 text-4xl sm:text-6xl font-black tracking-tighter">
             Paste a wallet.
@@ -53,23 +68,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="mx-auto max-w-5xl px-5 py-16">
-        <h2 className="text-center text-2xl font-black tracking-tight">How it works</h2>
-        <div className="mt-8 grid gap-5 sm:grid-cols-3">
-          {[
-            { icon: Wallet, title: "Paste address", desc: "Drop any public Solana wallet. No connection, no permissions." },
-            { icon: Zap, title: "We read the chain", desc: "Live holdings + USD value pulled straight from on-chain data." },
-            { icon: Shield, title: "Get judged", desc: "An archetype verdict and a cooked meter. Brutally honest." },
-          ].map((s) => (
-            <div key={s.title} className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-lime-400/10 text-lime-400">
-                <s.icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-4 text-lg font-bold">{s.title}</h3>
-              <p className="mt-2 text-sm text-zinc-400">{s.desc}</p>
-            </div>
-          ))}
+      <Features />
+      <Tokenomics />
+      <Roadmap />
+
+      {/* CTA */}
+      <section className="border-t border-zinc-900 bg-zinc-950/30">
+        <div className="mx-auto max-w-3xl px-5 py-20 text-center">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+            Check your bag. <span className="text-lime-400">Face the verdict.</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-zinc-400">
+            ${TOKEN.symbol} launches to the community that built BagCheck. Use the tool, share your verdict, be first in line.
+          </p>
+          <a
+            href="#"
+            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-lime-400 px-6 py-3 text-sm font-bold text-black transition hover:bg-lime-300"
+          >
+            <Wallet className="h-5 w-5" />
+            Run a check
+          </a>
         </div>
       </section>
 
