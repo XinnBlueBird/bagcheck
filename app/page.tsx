@@ -1,5 +1,6 @@
 import WalletChecker from "./components/WalletChecker";
 import BattleMode from "./components/BattleMode";
+import MobileNav from "./components/MobileNav";
 import Features from "./components/Features";
 import Tokenomics from "./components/Tokenomics";
 import Roadmap from "./components/Roadmap";
@@ -33,14 +34,17 @@ export default function Home() {
               </a>
             ))}
           </div>
-          <a
-            href={TOKEN.socials.x}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-lg bg-zinc-900 px-3 py-1.5 text-sm font-medium text-zinc-300 hover:bg-zinc-800 transition"
-          >
-            Follow
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href={TOKEN.socials.x}
+              target="_blank"
+              rel="noreferrer"
+              className="hidden rounded-lg bg-zinc-900 px-3 py-1.5 text-sm font-medium text-zinc-300 hover:bg-zinc-800 transition sm:inline-block"
+            >
+              Follow
+            </a>
+            <MobileNav items={NAV} social={TOKEN.socials.x} />
+          </div>
         </div>
       </nav>
 
