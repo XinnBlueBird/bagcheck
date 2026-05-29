@@ -78,12 +78,19 @@ export async function getRugReport(mint: string): Promise<RugReport> {
   const mintAuthorityActive = info.mintAuthority !== null;
   const freezeAuthorityActive = info.freezeAuthority !== null;
 
-  // Top holders → concentration.
-  const largest = await rpc<LargestAccounts>("getTokenLargestAccounts", [clean]);
-  const holders = (largest.value ?? [])
-    .map((h) => (h.uiAmount ?? Number(h.amount) / Math.pow(10, decimals)))
-    .filter((n) => n > 0)
-    .sort((a, b) => b - a);
+  // Top holders → concentration. Non-fatal: huge tokens (USDC etc.) make
+  // getTokenLargestAccounts reject with "too many accounts" — degrade gracefully.
+  let holders: number[] = [];
+  let concentrationAvailable = true;
+  try {
+    const largest = await rpc<LargestAccounts>("getTokenLargestAccounts", [clean]);
+    holders = (largest.value ?? [])
+      .map((h) => (h.uiAmount ?? Number(h.amount) / Math.pow(10, decimals)))
+      .filter((n) => n > 0)
+      .sort((a, b) => b - a);
+  } catch {
+    concentrationAvailable = false;
+  }
 
   const topHolderPct = supply > 0 && holders[0] ? (holders[0] / supply) * 100 : 0;
   const top10 = holders.slice(0, 10).reduce((s, h) => s + h, 0);
@@ -143,22 +150,28 @@ export async function getRugReport(mint: string): Promise<RugReport> {
       detail: "A single wallet can dump and crash the price instantly. Extreme concentration.",
     });
     score -= 25;
-  } else if (topHolderPct > 20) {
+  } else if (concentrationAvailable && topHolderPct > 20) {
     flags.push({
       level: "warn",
       title: `Top holder owns ${topHolderPct.toFixed(0)}%`,
       detail: "One wallet holds a large share. Watch for dump risk.",
     });
     score -= 12;
-  } else {
+  } else if (concentrationAvailable) {
     flags.push({
       level: "safe",
       title: `Top holder owns ${topHolderPct.toFixed(0)}%`,
       detail: "No single wallet dominates supply.",
     });
+  } else {
+    flags.push({
+      level: "warn",
+      title: "Holder data unavailable",
+      detail: "This token has too many accounts to scan concentration (common for large/established tokens). Authority checks above still apply.",
+    });
   }
 
-  if (top10Pct > 80) {
+  if (concentrationAvailable && top10Pct > 80) {
     flags.push({
       level: "warn",
       title: `Top 10 hold ${top10Pct.toFixed(0)}%`,
