@@ -21,6 +21,7 @@ export default function SiteNav() {
   }, [open]);
 
   return (
+    <>
     <header className="sticky top-0 z-50 border-b border-zinc-900 bg-black/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <a href="/" className="flex items-center gap-2">
@@ -58,7 +59,10 @@ export default function SiteNav() {
         </div>
       </div>
 
-      {/* Drawer overlay */}
+      </header>
+
+      {/* Drawer overlay — rendered as a header sibling so position:fixed escapes the
+          backdrop-filter containing block (was trapping the drawer inside the header). */}
       {open && (
         <div className="fixed inset-0 z-[60] lg:hidden">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setOpen(false)} />
@@ -100,6 +104,6 @@ export default function SiteNav() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
