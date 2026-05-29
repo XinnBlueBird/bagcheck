@@ -6,6 +6,9 @@ import type { Portfolio, TokenHolding } from "@/lib/helius";
 import type { Verdict } from "@/lib/verdict";
 import type { Insights } from "@/lib/insights";
 import InsightsPanel from "./InsightsPanel";
+import ShareCard from "./ShareCard";
+import { useWatchlist } from "../hooks/useWatchlist";
+import { Star } from "lucide-react";
 
 interface Result {
   portfolio: Portfolio;
@@ -117,8 +120,12 @@ export default function WalletChecker() {
 
 function Results({ result, copied, onCopy }: { result: Result; copied: boolean; onCopy: () => void }) {
   const { portfolio, verdict } = result;
+  const { add, remove, has } = useWatchlist();
+  const watched = has(portfolio.address);
   const accent = ACCENT[verdict.color] ?? ACCENT.slate;
   const bar = BAR[verdict.color] ?? BAR.slate;
+  const toggleWatch = () =>
+    watched ? remove(portfolio.address) : add(portfolio.address, verdict.archetype);
 
   return (
     <div className="mt-8 space-y-6">
@@ -148,15 +155,31 @@ function Results({ result, copied, onCopy }: { result: Result; copied: boolean; 
         </div>
       </div>
 
+      {/* Share card actions */}
+      <ShareCard portfolio={portfolio} verdict={verdict} />
+
       {/* Address + total */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950/60 px-5 py-4">
         <button onClick={onCopy} className="flex items-center gap-2 font-mono text-sm text-zinc-400 hover:text-zinc-200 transition">
           {copied ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
           {shortAddr(portfolio.address)}
         </button>
-        <div className="text-right">
-          <p className="text-xs font-mono uppercase tracking-wider text-zinc-500">Total Value</p>
-          <p className="text-2xl font-black text-zinc-100">{usd(portfolio.totalUsd)}</p>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleWatch}
+            className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
+              watched
+                ? "border-lime-500/40 bg-lime-500/10 text-lime-400"
+                : "border-zinc-700 bg-zinc-900 text-zinc-400 hover:text-zinc-200"
+            }`}
+          >
+            <Star className={`h-3.5 w-3.5 ${watched ? "fill-lime-400" : ""}`} />
+            {watched ? "Watching" : "Watch"}
+          </button>
+          <div className="text-right">
+            <p className="text-xs font-mono uppercase tracking-wider text-zinc-500">Total Value</p>
+            <p className="text-2xl font-black text-zinc-100">{usd(portfolio.totalUsd)}</p>
+          </div>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import WalletChecker from "./components/WalletChecker";
+import BattleMode from "./components/BattleMode";
 import Features from "./components/Features";
 import Tokenomics from "./components/Tokenomics";
 import Roadmap from "./components/Roadmap";
@@ -8,6 +9,7 @@ import { APP, TOKEN } from "@/config/token";
 const SAMPLE = "GDfnEsia2WLAW5t8yx2X5j2mkfA74i5kwGdDuZHt7XmG";
 
 const NAV = [
+  { label: "Battle", href: "#battle" },
   { label: "Features", href: "#features" },
   { label: "Tokenomics", href: "#tokenomics" },
   { label: "Roadmap", href: "#roadmap" },
@@ -65,6 +67,26 @@ export default function Home() {
             <span className="text-zinc-500">Try a sample: </span>
             <code className="text-lime-500/80 break-all">{SAMPLE}</code>
           </p>
+        </div>
+      </section>
+
+      {/* Battle Mode */}
+      <section id="battle" className="border-t border-zinc-900 bg-zinc-950/30">
+        <div className="mx-auto max-w-5xl px-5 py-20">
+          <div className="text-center">
+            <span className="inline-block rounded-full border border-lime-500/30 bg-lime-500/10 px-3 py-1 text-xs font-mono font-semibold text-lime-400">
+              Battle Mode
+            </span>
+            <h2 className="mt-5 text-3xl sm:text-4xl font-black tracking-tight">
+              Two wallets enter. <span className="text-lime-400">One gets cooked.</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-zinc-400">
+              Settle the group chat. Paste two wallets and let the bags do the talking.
+            </p>
+          </div>
+          <div className="mt-10">
+            <BattleMode />
+          </div>
         </div>
       </section>
 
