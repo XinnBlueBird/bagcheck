@@ -30,6 +30,22 @@ export const APP = {
     "Instant Solana wallet portfolio breakdown with a brutally honest degen verdict.",
 } as const;
 
+// Site navigation — shared between desktop bar and mobile drawer.
+export interface NavLink {
+  label: string;
+  href: string;
+}
+
+export const NAV_LINKS: NavLink[] = [
+  { label: "Wallet Checker", href: "/wallet" },
+  { label: "Rug Checker", href: "/rugcheck" },
+  { label: "AI Assistant", href: "/chat" },
+  { label: "Watchlist", href: "/watchlist" },
+  { label: "Tokenomics", href: "/tokenomics" },
+  { label: "Roadmap", href: "/roadmap" },
+  { label: "FAQ", href: "/faq" },
+];
+
 // Tokenomics — $BAG allocation. Percentages must total 100.
 export interface Allocation {
   label: string;
